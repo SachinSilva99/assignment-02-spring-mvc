@@ -34,6 +34,6 @@ public class Project implements SuperEntity{
     private PRIORITY priority;
 
     @ManyToOne
-    @JoinColumn(name = "teach_lead_id", referencedColumnName = "id")
+    @JoinColumn(name = "tech_lead_id", referencedColumnName = "id")
     private TechLead techLead;
 }
