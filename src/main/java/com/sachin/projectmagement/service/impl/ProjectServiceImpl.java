@@ -2,7 +2,9 @@ package com.sachin.projectmagement.service.impl;
 
 import com.sachin.projectmagement.dto.ProjectDTO;
 import com.sachin.projectmagement.entity.Project;
+import com.sachin.projectmagement.entity.TechLead;
 import com.sachin.projectmagement.repo.ProjectRepo;
+import com.sachin.projectmagement.repo.TechLeadRepo;
 import com.sachin.projectmagement.service.ProjectService;
 import com.sachin.projectmagement.service.exception.NotFoundException;
 import com.sachin.projectmagement.util.idgenerator.IdGenerator;
@@ -18,12 +20,14 @@ import java.util.stream.Collectors;
 public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepo projectRepo;
+    private final TechLeadRepo techLeadRepo;
     private final IdGenerator idGenerator;
 
     private final DTOConversion conversion;
 
-    public ProjectServiceImpl(ProjectRepo projectRepo, IdGeneratorImpl idGeneratorImpl, DTOConversion conversion) {
+    public ProjectServiceImpl(ProjectRepo projectRepo, TechLeadRepo techLeadRepo, IdGeneratorImpl idGeneratorImpl, DTOConversion conversion) {
         this.projectRepo = projectRepo;
+        this.techLeadRepo = techLeadRepo;
         this.idGenerator = idGeneratorImpl;
         this.conversion = conversion;
     }
@@ -35,14 +39,22 @@ public class ProjectServiceImpl implements ProjectService {
             id = idGenerator.generateRandomID(10);
         }
         projectDTO.setId(id);
-        return projectRepo.save(conversion.toProject(projectDTO)).getId();
+        String techLeadId = projectDTO.getTechLeadId();
+        Optional<TechLead> byId = techLeadRepo.findById(techLeadId);
+        if (byId.isEmpty()) {
+            throw new NotFoundException("TechLead id : " + techLeadId + " not found");
+        }
+        TechLead techLead = byId.get();
+        Project project = conversion.toProject(projectDTO);
+        project.setTechLead(techLead);
+        return projectRepo.save(project).getId();
     }
 
     @Override
     public void delete(String projectId) throws NotFoundException {
         Optional<Project> byId = projectRepo.findById(projectId);
         if (byId.isEmpty()) {
-            throw new NotFoundException(projectId + " not found");
+            throw new NotFoundException("project id : "+projectId + " not found");
         }
         projectRepo.delete(byId.get());
     }
@@ -59,6 +71,15 @@ public class ProjectServiceImpl implements ProjectService {
         project.setPriority(dto.getPriority());
         project.setStartDate(dto.getStartDate());
         project.setEndDate(dto.getEndDate());
+
+        String techLeadId = dto.getTechLeadId();
+        Optional<TechLead> techLeadById = techLeadRepo.findById(techLeadId);
+        if (techLeadById.isEmpty()) {
+            throw new NotFoundException("TechLead id : " + techLeadId + " not found");
+        }
+        TechLead techLead = techLeadById.get();
+        project.setTechLead(techLead);
+
         projectRepo.save(project);
     }
 
