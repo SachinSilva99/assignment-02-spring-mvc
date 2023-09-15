@@ -13,7 +13,7 @@ public interface TechLeadService {
 
     void update(String techLeadId, TechLeadDTO techLeadDTO) throws NotFoundException;
 
-    Optional<TechLeadDTO> get(String techLeadId);
+    TechLeadDTO get(String techLeadId);
 
     List<TechLeadDTO> getAll();
 }

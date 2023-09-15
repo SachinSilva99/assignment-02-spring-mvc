@@ -54,7 +54,7 @@ public class ProjectServiceImpl implements ProjectService {
     public void delete(String projectId) throws NotFoundException {
         Optional<Project> byId = projectRepo.findById(projectId);
         if (byId.isEmpty()) {
-            throw new NotFoundException("project id : "+projectId + " not found");
+            throw new NotFoundException("project id : " + projectId + " not found");
         }
         projectRepo.delete(byId.get());
     }
@@ -84,9 +84,12 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Optional<ProjectDTO> get(String projectId) {
+    public ProjectDTO get(String projectId) throws NotFoundException{
         Optional<Project> byId = projectRepo.findById(projectId);
-        return byId.map(conversion::toProjectDto);
+        if (byId.isEmpty()) {
+            throw new NotFoundException("project id : " + projectId + " not found");
+        }
+        return conversion.toProjectDto(byId.get());
     }
 
     @Override

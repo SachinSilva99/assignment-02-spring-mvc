@@ -1,10 +1,12 @@
 plugins {
     id 'java'
     id 'war'
+
 }
 
 group 'com.sachin'
 version '1.0.0'
+
 
 repositories {
     mavenCentral()
@@ -45,6 +47,8 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springframework/spring-context
     implementation group: 'org.springframework', name: 'spring-context', version: '5.3.29'
 
+
+    annotationProcessor 'org.projectlombok:lombok:1.18.28'
     // https://mvnrepository.com/artifact/org.projectlombok/lombok
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.28'
 
@@ -54,6 +58,11 @@ dependencies {
     // https://mvnrepository.com/artifact/org.hibernate/hibernate-core
     implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.6.15.Final'
 
+// https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml
+    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.15.2'
+
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.15.2'
 
 }
 

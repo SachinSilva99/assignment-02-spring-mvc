@@ -13,7 +13,7 @@ public interface ProjectService {
 
     void update(String projectId, ProjectDTO projectDTO) throws NotFoundException;
 
-    Optional<ProjectDTO> get(String projectId);
+    ProjectDTO get(String projectId)throws NotFoundException;
 
     List<ProjectDTO> getAll();
 

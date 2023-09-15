@@ -40,7 +40,7 @@ public class TechLeadServiceImpl implements TechLeadService {
     public void delete(String techLeadId) throws NotFoundException {
         Optional<TechLead> byId = techLeadRepo.findById(techLeadId);
         if (byId.isEmpty()) {
-            throw new NotFoundException("teachlead id : "+ techLeadId + " not found");
+            throw new NotFoundException("teachlead id : " + techLeadId + " not found");
         }
         techLeadRepo.delete(byId.get());
     }
@@ -49,7 +49,7 @@ public class TechLeadServiceImpl implements TechLeadService {
     public void update(String techLeadId, TechLeadDTO dto) throws NotFoundException {
         Optional<TechLead> byId = techLeadRepo.findById(techLeadId);
         if (byId.isEmpty()) {
-            throw new NotFoundException("teachlead id : "+ techLeadId + " not found");
+            throw new NotFoundException("teachlead id : " + techLeadId + " not found");
         }
         TechLead techLead = byId.get();
         techLead.setName(dto.getName());
@@ -59,9 +59,12 @@ public class TechLeadServiceImpl implements TechLeadService {
     }
 
     @Override
-    public Optional<TechLeadDTO> get(String techLeadId) {
+    public TechLeadDTO get(String techLeadId) {
         Optional<TechLead> byId = techLeadRepo.findById(techLeadId);
-        return byId.map(conversion::toTechLeadDto);
+        if (byId.isEmpty()) {
+            throw new NotFoundException("teachlead id : " + techLeadId + " not found");
+        }
+        return conversion.toTechLeadDto(byId.get());
     }
 
     @Override
