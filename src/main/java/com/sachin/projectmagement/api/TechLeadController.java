@@ -29,12 +29,8 @@ public class TechLeadController {
             @RequestPart byte[] profile
     ) {
 
-        if (name == null || address == null || profile == null) {
-            return new ResponseEntity<>(
-                    new StandardResponse(400, " invalid data", null),
-                    HttpStatus.BAD_REQUEST
-            );
-        }
+        ResponseEntity<StandardResponse> BAD_REQUEST = validateFields(name, address, profile);
+        if (BAD_REQUEST != null) return BAD_REQUEST;
 
         String sProfile = Base64.getEncoder().encodeToString(profile);
         TechLeadDTO techLeadDTO = new TechLeadDTO(name, address, sProfile);
@@ -43,6 +39,7 @@ public class TechLeadController {
                 HttpStatus.CREATED);
     }
 
+
     @GetMapping(value = "/{techLeadId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<StandardResponse> get(@PathVariable String techLeadId) throws NotFoundException {
         TechLeadDTO techLeadDTO = leadService.get(techLeadId);
@@ -50,18 +47,17 @@ public class TechLeadController {
     }
 
     @PutMapping("/{techLeadId}")
-    public ResponseEntity<StandardResponse> update(@RequestBody TechLeadDTO dto, @PathVariable String techLeadId) {
-        String id = dto.getId();
-        String name = dto.getName();
-        String address = dto.getAddress();
-        String profile = dto.getProfile();
-        if (id == null || name == null || address == null || profile == null) {
-            return new ResponseEntity<>(
-                    new StandardResponse(400, " invalid data", null),
-                    HttpStatus.BAD_REQUEST
-            );
-        }
-        leadService.update(techLeadId, dto);
+    public ResponseEntity<StandardResponse> update(
+            @RequestPart String name,
+            @RequestPart String address,
+            @RequestPart byte[] profile,
+            @PathVariable String techLeadId) {
+        ResponseEntity<StandardResponse> BAD_REQUEST = validateFields(name, address, profile);
+        if (BAD_REQUEST != null) return BAD_REQUEST;
+
+        String sProfile = Base64.getEncoder().encodeToString(profile);
+        TechLeadDTO techLeadDTO = new TechLeadDTO(name, address, sProfile);
+        leadService.update(techLeadId, techLeadDTO);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -75,5 +71,15 @@ public class TechLeadController {
     public ResponseEntity<StandardResponse> getAll() throws NotFoundException {
         List<TechLeadDTO> techLeadDTOList = leadService.getAll();
         return new ResponseEntity<>(new StandardResponse(200, "ok", techLeadDTOList), HttpStatus.OK);
+    }
+
+    private ResponseEntity<StandardResponse> validateFields(String name, String address, byte[] profile) {
+        if (name == null || address == null || profile == null) {
+            return new ResponseEntity<>(
+                    new StandardResponse(400, " invalid data", null),
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+        return null;
     }
 }
