@@ -46,7 +46,7 @@ public class TechLeadController {
         return new ResponseEntity<>(new StandardResponse(200, techLeadId, techLeadDTO), HttpStatus.OK);
     }
 
-    @PutMapping("/{techLeadId}")
+    @PutMapping(value = "/{techLeadId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<StandardResponse> update(
             @RequestPart String name,
             @RequestPart String address,
