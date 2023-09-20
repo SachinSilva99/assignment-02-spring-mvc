@@ -6,39 +6,29 @@ import com.sachin.projectmagement.entity.TechLead;
 import com.sachin.projectmagement.repo.ProjectRepo;
 import com.sachin.projectmagement.repo.TechLeadRepo;
 import com.sachin.projectmagement.service.ProjectService;
-import com.sachin.projectmagement.service.exception.NotFoundException;
-import com.sachin.projectmagement.util.idgenerator.IdGenerator;
-import com.sachin.projectmagement.util.idgenerator.IdGeneratorImpl;
+import com.sachin.projectmagement.exception.NotFoundException;
 import com.sachin.projectmagement.util.mapper.DTOConversion;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepo projectRepo;
     private final TechLeadRepo techLeadRepo;
-    private final IdGenerator idGenerator;
-
     private final DTOConversion conversion;
 
-    public ProjectServiceImpl(ProjectRepo projectRepo, TechLeadRepo techLeadRepo, IdGeneratorImpl idGeneratorImpl, DTOConversion conversion) {
-        this.projectRepo = projectRepo;
-        this.techLeadRepo = techLeadRepo;
-        this.idGenerator = idGeneratorImpl;
-        this.conversion = conversion;
-    }
+
 
     @Override
     public String save(ProjectDTO projectDTO) {
-        String id = idGenerator.generateRandomID(10);
-        while (projectRepo.findById(id).isPresent()) {
-            id = idGenerator.generateRandomID(10);
-        }
-        projectDTO.setId(id);
+        projectDTO.setId(UUID.randomUUID().toString());
         String techLeadId = projectDTO.getTechLeadId();
         Optional<TechLead> byId = techLeadRepo.findById(techLeadId);
         if (byId.isEmpty()) {
@@ -79,8 +69,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
         TechLead techLead = techLeadById.get();
         project.setTechLead(techLead);
-
-        projectRepo.save(project);
+//        projectRepo.save(project);
     }
 
     @Override

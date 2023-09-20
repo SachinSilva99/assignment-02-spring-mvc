@@ -1,4 +1,4 @@
-package com.sachin.projectmagement.service.exception;
+package com.sachin.projectmagement.exception;
 
 public class NotFoundException extends RuntimeException{
     public NotFoundException() {

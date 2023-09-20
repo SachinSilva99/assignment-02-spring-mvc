@@ -5,17 +5,16 @@ import com.sachin.projectmagement.dto.TechLeadDTO;
 import com.sachin.projectmagement.entity.Project;
 import com.sachin.projectmagement.entity.TechLead;
 import com.sachin.projectmagement.util.mapper.DTOConversion;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class DTOConversionImpl implements DTOConversion {
 
     private final ModelMapper mapper;
 
-    public DTOConversionImpl(ModelMapper mapper) {
-        this.mapper = mapper;
-    }
 
     @Override
     public ProjectDTO toProjectDto(Project project) {

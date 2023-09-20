@@ -2,21 +2,19 @@ package com.sachin.projectmagement.api;
 
 import com.sachin.projectmagement.dto.ProjectDTO;
 import com.sachin.projectmagement.service.ProjectService;
-import com.sachin.projectmagement.service.exception.NotFoundException;
 import com.sachin.projectmagement.util.StandardResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1/project")
+@RequestMapping(value = "api/v1/project")
+@RequiredArgsConstructor
 public class ProjectController {
-    private final ProjectService projectService;
 
-    public ProjectController(ProjectService projectService) {
-        this.projectService = projectService;
-    }
+    private final ProjectService projectService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<StandardResponse> save(@RequestBody ProjectDTO projectDTO) {
@@ -25,7 +23,7 @@ public class ProjectController {
     }
 
     @GetMapping(value = "/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<StandardResponse> get(@PathVariable String projectId) throws NotFoundException {
+    public ResponseEntity<StandardResponse> get(@PathVariable String projectId) {
         ProjectDTO projectDTO = projectService.get(projectId);
         return new ResponseEntity<>(new StandardResponse(200, "ok", projectDTO), HttpStatus.OK);
     }

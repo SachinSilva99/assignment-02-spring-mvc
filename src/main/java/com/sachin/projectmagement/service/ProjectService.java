@@ -1,9 +1,8 @@
 package com.sachin.projectmagement.service;
 
 import com.sachin.projectmagement.dto.ProjectDTO;
-import com.sachin.projectmagement.service.exception.NotFoundException;
+import com.sachin.projectmagement.exception.NotFoundException;
 import java.util.List;
-import java.util.Optional;
 
 public interface ProjectService {
 

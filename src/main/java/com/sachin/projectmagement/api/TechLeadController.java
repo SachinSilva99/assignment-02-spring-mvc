@@ -3,8 +3,9 @@ package com.sachin.projectmagement.api;
 
 import com.sachin.projectmagement.dto.TechLeadDTO;
 import com.sachin.projectmagement.service.TechLeadService;
-import com.sachin.projectmagement.service.exception.NotFoundException;
+import com.sachin.projectmagement.exception.NotFoundException;
 import com.sachin.projectmagement.util.StandardResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,14 +16,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/techlead")
+@RequiredArgsConstructor
 public class TechLeadController {
     private final TechLeadService leadService;
 
-    public TechLeadController(TechLeadService leadService) {
-        this.leadService = leadService;
-    }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<StandardResponse> save(
             @RequestPart String name,
             @RequestPart String address,
